@@ -18,5 +18,48 @@ def create_user():
     return jsonify(msg='User created!'), 200
 
 
+@user.route('/user/update', methods=['POST'])
+def update_user():
+    user = request.get_json()
+
+    updated = user_repo.update_user(user)
+    if not updated:
+        return jsonify(msg='Could not update user!'), 400
+
+    return jsonify(msg='User updated!'), 200
+
+
+@user.route('/user/delete', methods=['POST'])
+def delete_user():
+    request_data = request.get_json()
+    username = request_data['username']
+
+    deleted = user_repo.delete_user(username)
+    if not deleted:
+        return jsonify(msg='Could not delete user!'), 400
+    
+    return jsonify(msg='User deleted!'), 200
+
+
+@user.route('/user/get', methods=['POST'])
+def get_user():
+    request_data = request.get_json()
+
+    try:
+        key = request_data['username']
+        user = user_repo.get_user_by_username(key)
+        if not user:
+            return jsonify(msg='User not found!'), 400
+
+        return jsonify(
+            name = user.name,
+            email = user.email,
+            username = user.username
+        ), 200
+
+    except KeyError:
+        return jsonify(msg='Please provide an username or email'), 400
+
+
 def init(app: Flask):
     app.register_blueprint(user)
