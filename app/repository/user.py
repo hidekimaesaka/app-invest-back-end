@@ -42,14 +42,49 @@ class UserRepository:
 
         return True
 
-    def update_user_adress_by_user_id(self, adress_obj, user_id):
-        ...
 
-    def update_user():
-        ...
+    def update_user(self, user_obj: dict) -> bool:
+        """tries to update a user by given user_obj
+        returns true if updated, false if not.
+
+        Args:
+            user_obj (dict): user object from the request
+
+        Returns:
+            bool: true if updated, false if not
+        """
+
+        username = user_obj['username']
+
+        user_to_update = self.get_user_by_username(username)
+
+        if not user_to_update:
+            return False
+        
+        user_to_update.email = user_obj['email']
+        user_to_update.name = user_obj['name']
+
+        self.session.merge(user_to_update)
+        self.session.commit()
+        return True
     
-    def delete_user():
-        ...
+    def delete_user(self, username: str) -> bool:
+        """deletes a user by username
+
+        Args:
+            username (str): username string from request obj
+
+        Returns:
+            bool: true if deleted, false if not
+        """
+        
+        user = self.get_user_by_username(username)
+        if not user:
+            return False
+
+        self.session.delete(user)
+        self.session.commit()
+        return True
     
     def get_user_by_username(self, username: str) -> User | None:
         """searchs for a user on database by given username
