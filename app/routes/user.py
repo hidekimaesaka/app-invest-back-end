@@ -1,5 +1,7 @@
 from flask import Flask, Blueprint, request, jsonify
 
+from flask_jwt_extended import jwt_required
+
 from app.repository.user import UserRepository
 
 user = Blueprint('user', __name__)
@@ -8,6 +10,7 @@ user_repo = UserRepository()
 
 
 @user.route('/user/create', methods=['POST'])
+@jwt_required()
 def create_user():
     user = request.get_json()
 
@@ -19,6 +22,7 @@ def create_user():
 
 
 @user.route('/user/update', methods=['POST'])
+@jwt_required()
 def update_user():
     user = request.get_json()
 
@@ -30,6 +34,7 @@ def update_user():
 
 
 @user.route('/user/delete', methods=['POST'])
+@jwt_required()
 def delete_user():
     request_data = request.get_json()
     username = request_data['username']
@@ -42,6 +47,7 @@ def delete_user():
 
 
 @user.route('/user/get', methods=['POST'])
+@jwt_required()
 def get_user():
     request_data = request.get_json()
 
