@@ -10,7 +10,6 @@ user_repo = UserRepository()
 
 
 @user.route('/user/create', methods=['POST'])
-@jwt_required()
 def create_user():
     user = request.get_json()
 

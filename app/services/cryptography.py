@@ -43,7 +43,7 @@ class EncryptionService:
 
         try:
             decrypted_string = self.encryptor.decrypt(str_to_decrypt)
-            return decrypted_string
+            return decrypted_string.decode()
 
         except Exception as e:
             return None
